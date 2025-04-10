@@ -11,7 +11,7 @@ var (
 
 	rootCmd = &cobra.Command{
 		Use:   "wp-plugin-generator",
-		Short: "A Wordpress plugin generator",
+		Short: "A WordPress plugin generator",
 	}
 )
 
