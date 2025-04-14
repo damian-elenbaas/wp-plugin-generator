@@ -46,35 +46,22 @@ func containsInvalidCharacters(s string) bool {
 	return false
 }
 
+var directories = []string{
+	"",
+	"includes",
+	"public",
+	"admin",
+	"languages",
+	"vendor",
+}
+
 func createDirectories(exportDir string) error {
-	// Create root directories if they don't exist
-	err := os.MkdirAll(exportDir, 0755)
-	if err != nil {
-		return err
-	}
-
-	// Create includes directory
-	err = os.MkdirAll(filepath.Join(exportDir, "includes"), 0755)
-	if err != nil {
-		return err
-	}
-
-	// Create public directory
-	err = os.MkdirAll(filepath.Join(exportDir, "public"), 0755)
-	if err != nil {
-		return err
-	}
-
-	// Create admin directory
-	err = os.MkdirAll(filepath.Join(exportDir, "admin"), 0755)
-	if err != nil {
-		return err
-	}
-
-	// Create languages directory
-	err = os.MkdirAll(filepath.Join(exportDir, "languages"), 0755)
-	if err != nil {
-		return err
+	// Create directories
+	for _, dir := range directories {
+		err := os.MkdirAll(filepath.Join(exportDir, dir), 0755)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

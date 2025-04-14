@@ -12,6 +12,7 @@ func (data *pluginData) createFiles(exportDir string) error {
 	data.createDeactivatorFile(exportDir)
 	data.createI18nFile(exportDir)
 	data.createGitIgnore(exportDir)
+	data.createIndexFiles(exportDir)
 
 	return nil
 }
@@ -63,4 +64,13 @@ func (data *pluginData) createGitIgnore(exportDir string) {
 		".gitignore.tmpl",
 		filepath.Join(exportDir, ".gitignore"),
 		*data)
+}
+
+func (data *pluginData) createIndexFiles(exportDir string) {
+	for _, dir := range directories {
+		processTemplate(
+			"index.php.tmpl",
+			filepath.Join(exportDir, dir, "index.php"),
+			*data)
+	}
 }
