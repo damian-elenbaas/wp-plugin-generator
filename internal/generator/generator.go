@@ -2,6 +2,7 @@ package generator
 
 import (
 	"errors"
+	"os"
 	"strings"
 )
 
@@ -11,6 +12,12 @@ func GeneratePlugin(exportDir string, projectName string) error {
 	}
 
 	pluginData, err := generatePluginData(projectName)
+	if err != nil {
+		return err
+	}
+
+	// Create directories if they don't exist
+	err = os.MkdirAll(exportDir, 0755)
 	if err != nil {
 		return err
 	}
