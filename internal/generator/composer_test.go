@@ -14,17 +14,35 @@ func TestGenerateComposerJson(t *testing.T) {
 		wantErr           bool
 	}{
 		{
-			name:        "basic",
-			projectName: "project",
+			name:        "basic-1",
+			projectName: "MyWordpressPlugin",
 			authors: []Author{
 				{Name: "John Doe", Email: "john@example.com"},
 			},
-			expectedNamespace: "Project\\",
+			expectedNamespace: "MyWordpressPlugin\\",
+			wantErr:           false,
+		},
+		{
+			name:        "basic-2",
+			projectName: "my-wordpress-plugin",
+			authors: []Author{
+				{Name: "John Doe", Email: "john@example.com"},
+			},
+			expectedNamespace: "MyWordpressPlugin\\",
 			wantErr:           false,
 		},
 		{
 			name:        "advanced project name",
 			projectName: "company/my-project",
+			authors: []Author{
+				{Name: "John Doe", Email: "john@example.com"},
+			},
+			expectedNamespace: "Company\\MyProject\\",
+			wantErr:           false,
+		},
+		{
+			name:        "advanced project name 2",
+			projectName: "Company/MyProject",
 			authors: []Author{
 				{Name: "John Doe", Email: "john@example.com"},
 			},

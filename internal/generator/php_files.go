@@ -2,11 +2,8 @@ package generator
 
 import (
 	"errors"
-	"os"
 	"path/filepath"
 	"strings"
-	"text/template"
-	"unicode"
 )
 
 type pluginData struct {
@@ -23,15 +20,26 @@ type pluginData struct {
 }
 
 func generatePluginData(projectName string) (*pluginData, error) {
+
+	textDomain, err := generateTextDomain(projectName)
+	if err != nil {
+		return nil, err
+	}
+
+	classPrefix, err := generateClassPrefix(projectName)
+	if err != nil {
+		return nil, err
+	}
+
 	return &pluginData{
 		PluginName:      projectName,
 		Description:     "A WordPress plugin",
 		Version:         "0.1.0",
 		Author:          "Your Name",
-		TextDomain:      "TextDomain",
+		TextDomain:      *textDomain,
 		NamespaceName:   "Namespace\\PackageName",
 		PackageName:     "PackageName",
-		ClassPrefix:     "ClassPrefix",
+		ClassPrefix:     *classPrefix,
 		ConstantPrefix:  "ConstantPrefix",
 		FunctionPostfix: "function_postfix",
 	}, nil
@@ -56,18 +64,22 @@ func generateTextDomain(projectName string) (*string, error) {
 	return &result, nil
 }
 
-func splitOnCapitals(s string) []string {
-	var parts []string
-	last := 0
-
-	for i, r := range s {
-		if i > 0 && unicode.IsUpper(r) {
-			parts = append(parts, s[last:i])
-			last = i
-		}
+// Generates the class prefix for the given projectname
+func generateClassPrefix(projectName string) (*string, error) {
+	parts := strings.Split(projectName, "/")
+	if len(parts) <= 0 {
+		return nil, errors.New("projectName is empty")
 	}
-	parts = append(parts, s[last:])
-	return parts
+
+	lastPart := parts[len(parts)-1]
+	words := strings.Split(lastPart, "-")
+	for i := range words {
+		word := words[i]
+		words[i] = strings.ToUpper(word[0:1]) + word[1:]
+	}
+	result := strings.Join(words, "")
+
+	return &result, nil
 }
 
 func createMainFile(exportDir string, data pluginData) error {
@@ -77,22 +89,4 @@ func createMainFile(exportDir string, data pluginData) error {
 		data)
 
 	return nil
-}
-
-func processTemplate(templatePath, outputPath string, data pluginData) {
-	tmpl, err := template.ParseFiles(templatePath)
-	if err != nil {
-		panic(err)
-	}
-
-	outputFile, err := os.Create(outputPath)
-	if err != nil {
-		panic(err)
-	}
-	defer outputFile.Close()
-
-	if err := tmpl.Execute(outputFile, data); err != nil {
-		panic(err)
-	}
-
 }

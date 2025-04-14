@@ -15,6 +15,10 @@ var generateCmd = &cobra.Command{
 	Short: "Generate the WordPress plugin boilercode.",
 	Run: func(cmd *cobra.Command, args []string) {
 		projectName := args[0]
-		generator.GeneratePlugin(exportDir, projectName)
+		err := generator.GeneratePlugin(exportDir, projectName)
+		if err != nil {
+			cmd.PrintErrf("Error generating plugin: %v\n", err)
+			return
+		}
 	},
 }
