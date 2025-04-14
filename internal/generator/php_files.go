@@ -1,9 +1,12 @@
 package generator
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
+	"unicode"
 )
 
 type pluginData struct {
@@ -32,6 +35,39 @@ func generatePluginData(projectName string) (*pluginData, error) {
 		ConstantPrefix:  "ConstantPrefix",
 		FunctionPostfix: "function_postfix",
 	}, nil
+}
+
+// Takes the last part of the projectName after '/' and coverts it to a textdomain
+func generateTextDomain(projectName string) (*string, error) {
+	parts := strings.Split(projectName, "/")
+	if len(parts) <= 0 {
+		return nil, errors.New("projectName is empty")
+	}
+
+	lastPart := parts[len(parts)-1]
+	// split on capitalized characters
+	words := splitOnCapitals(lastPart)
+	for i := range words {
+		words[i] = strings.ToLower(words[i])
+	}
+
+	result := strings.Join(words, "-")
+
+	return &result, nil
+}
+
+func splitOnCapitals(s string) []string {
+	var parts []string
+	last := 0
+
+	for i, r := range s {
+		if i > 0 && unicode.IsUpper(r) {
+			parts = append(parts, s[last:i])
+			last = i
+		}
+	}
+	parts = append(parts, s[last:])
+	return parts
 }
 
 func createMainFile(exportDir string, data pluginData) error {
