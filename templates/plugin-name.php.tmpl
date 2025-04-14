@@ -1,0 +1,52 @@
+<?php
+
+require_once(plugin_dir_path(__FILE__) . '/lib/autoload.php');
+
+use {{.NamespaceName}}\{{.ClassPrefix}};
+use {{.NamespaceName}}\{{.ClassPrefix}}_Activator;
+use {{.NamespaceName}}\{{.ClassPrefix}}_Deactivator;
+
+/**
+ * @wordpress-plugin
+ * Plugin Name:       {{.PluginName}}
+ * Description:       {{.Description}}
+ * Version:           {{.Version}}
+ * Author:            {{.Author}} 
+ * Text Domain:       {{.TextDomain}}
+ * Domain Path:       /languages
+ * Requires PHP:      8.1.0
+ */
+
+// If this file is called directly, abort.
+if (! defined('WPINC')) {
+    die;
+}
+
+define('{{.ConstantPrefix}}_VERSION', '0.10.0');
+
+function activate_{{.FunctionPostfix}}() {
+    {{.ClassPrefix}}_Activator::activate();
+}
+
+function deactivate_{{.FunctionPostfix}}() {
+    {{.ClassPrefix}}_Deactivator::deactivate();
+}
+
+register_activation_hook(__FILE__, 'activate_{{.FunctionPostfix}}');
+register_deactivation_hook(__FILE__, 'deactivate_{{.FunctionPostfix}}');
+
+/**
+ * Begins execution of the plugin.
+ *
+ * Since everything within the plugin is registered via hooks,
+ * then kicking off the plugin from this point in the file does
+ * not affect the page life cycle.
+ *
+ * @since    1.0.0
+ */
+function run_{{.FunctionPostfix}}() {
+
+    $plugin = new {{.ClassPrefix}}();
+    $plugin->run();
+}
+run_{{.FunctionPostfix}}();
