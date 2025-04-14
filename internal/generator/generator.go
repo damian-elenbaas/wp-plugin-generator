@@ -50,7 +50,11 @@ var directories = []string{
 	"",
 	"includes",
 	"public",
+	"public/css",
+	"public/js",
 	"admin",
+	"admin/css",
+	"admin/js",
 	"languages",
 	"vendor",
 }

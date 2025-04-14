@@ -6,7 +6,7 @@ import (
 
 func (data *pluginData) createFiles(exportDir string) error {
 	data.createActivatorFile(exportDir)
-	data.createAdminFile(exportDir)
+	data.createAdminFiles(exportDir)
 	data.createDeactivatorFile(exportDir)
 	data.createGitIgnore(exportDir)
 	data.createI18nFile(exportDir)
@@ -67,10 +67,18 @@ func (data *pluginData) createGitIgnore(exportDir string) {
 		*data)
 }
 
-func (data *pluginData) createAdminFile(exportDir string) {
+func (data *pluginData) createAdminFiles(exportDir string) {
 	processTemplate(
 		"admin/PluginName_Admin.php.tmpl",
 		filepath.Join(exportDir, "admin/"+data.ClassPrefix+"_Admin.php"),
+		*data)
+	processTemplate(
+		"admin/css/plugin-name-admin.css.tmpl",
+		filepath.Join(exportDir, "admin/css/"+data.Slug+"-admin.css"),
+		*data)
+	processTemplate(
+		"admin/js/plugin-name-admin.js.tmpl",
+		filepath.Join(exportDir, "admin/js/"+data.Slug+"-admin.js"),
 		*data)
 }
 
