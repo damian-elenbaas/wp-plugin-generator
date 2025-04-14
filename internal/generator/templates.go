@@ -1,12 +1,22 @@
 package generator
 
 import (
+	"embed"
 	"os"
 	"text/template"
 )
 
-func processTemplate(templatePath, outputPath string, data pluginData) {
-	tmpl, err := template.ParseFiles(templatePath)
+//go:embed templates/*
+var templateFS embed.FS
+
+func processTemplate(templateName, outputPath string, data pluginData) {
+	// Read template from embedded FS
+	tmplData, err := templateFS.ReadFile("templates/" + templateName)
+	if err != nil {
+		panic(err)
+	}
+
+	tmpl, err := template.New(templateName).Parse(string(tmplData))
 	if err != nil {
 		panic(err)
 	}

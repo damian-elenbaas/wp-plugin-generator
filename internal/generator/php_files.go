@@ -169,7 +169,7 @@ func generateSlug(projectName string) (*string, error) {
 
 func createMainFile(exportDir string, data pluginData) error {
 	processTemplate(
-		"templates/plugin-name.php.tmpl",
+		"plugin-name.php.tmpl",
 		filepath.Join(exportDir, data.Slug+".php"),
 		data)
 
