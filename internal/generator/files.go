@@ -5,14 +5,15 @@ import (
 )
 
 func (data *pluginData) createFiles(exportDir string) error {
-	data.createPluginRootFile(exportDir)
-	data.createMainFile(exportDir)
-	data.createLoaderFile(exportDir)
 	data.createActivatorFile(exportDir)
+	data.createAdminFile(exportDir)
 	data.createDeactivatorFile(exportDir)
-	data.createI18nFile(exportDir)
 	data.createGitIgnore(exportDir)
+	data.createI18nFile(exportDir)
 	data.createIndexFiles(exportDir)
+	data.createLoaderFile(exportDir)
+	data.createMainFile(exportDir)
+	data.createPluginRootFile(exportDir)
 
 	return nil
 }
@@ -54,8 +55,8 @@ func (data *pluginData) createDeactivatorFile(exportDir string) {
 
 func (data *pluginData) createI18nFile(exportDir string) {
 	processTemplate(
-		"includes/PluginName_i18n.php.tmpl",
-		filepath.Join(exportDir, "includes/"+data.ClassPrefix+"_i18n.php"),
+		"includes/PluginName_I18n.php.tmpl",
+		filepath.Join(exportDir, "includes/"+data.ClassPrefix+"_I18n.php"),
 		*data)
 }
 
@@ -63,6 +64,13 @@ func (data *pluginData) createGitIgnore(exportDir string) {
 	processTemplate(
 		".gitignore.tmpl",
 		filepath.Join(exportDir, ".gitignore"),
+		*data)
+}
+
+func (data *pluginData) createAdminFile(exportDir string) {
+	processTemplate(
+		"admin/PluginName_Admin.php.tmpl",
+		filepath.Join(exportDir, "admin/"+data.ClassPrefix+"_Admin.php"),
 		*data)
 }
 
