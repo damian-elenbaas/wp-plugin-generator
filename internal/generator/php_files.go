@@ -167,19 +167,48 @@ func generateSlug(projectName string) (*string, error) {
 	return &result, nil
 }
 
-func createPluginRootFile(exportDir string, data pluginData) error {
-	processTemplate(
-		"plugin-name.php.tmpl",
-		filepath.Join(exportDir, data.Slug+".php"),
-		data)
+func (data *pluginData) createFiles(exportDir string) error {
+	err := data.createPluginRootFile(exportDir)
+	if err != nil {
+		return err
+	}
+
+	err = data.createMainFile(exportDir)
+	if err != nil {
+		return err
+	}
+
+	err = data.createLoaderFile(exportDir)
+	if err != nil {
+
+	}
 
 	return nil
 }
 
-func createMainFile(exportDir string, data pluginData) error {
+func (data *pluginData) createPluginRootFile(exportDir string) error {
+	processTemplate(
+		"plugin-name.php.tmpl",
+		filepath.Join(exportDir, data.Slug+".php"),
+		*data)
+
+	return nil
+}
+
+func (data *pluginData) createMainFile(exportDir string) error {
 	processTemplate(
 		"includes/PluginName.php.tmpl",
 		filepath.Join(exportDir, "includes/"+data.ClassPrefix+".php"),
-		data)
+		*data)
+
+	return nil
+}
+
+func (data *pluginData) createLoaderFile(exportDir string) error {
+	processTemplate(
+		"includes/PluginName_Loader.php.tmpl",
+		filepath.Join(exportDir, "includes/"+data.ClassPrefix+"_Loader.php"),
+		*data)
+
 	return nil
 }

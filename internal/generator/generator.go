@@ -27,12 +27,7 @@ func GeneratePlugin(exportDir string, projectName string) error {
 		return err
 	}
 
-	err = createPluginRootFile(exportDir, *pluginData)
-	if err != nil {
-		return err
-	}
-
-	err = createMainFile(exportDir, *pluginData)
+	err = pluginData.createFiles(exportDir)
 	if err != nil {
 		return err
 	}
