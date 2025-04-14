@@ -2,6 +2,7 @@ package generator
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -13,13 +14,18 @@ type Author struct {
 	Email string `json:"email"`
 }
 
-func generateComposerJson(projectName string, authors []Author) (string, error) {
+func generateComposerJson(projectName string, authors []Author) (*string, error) {
 	type ComposerJson struct {
 		Name       string            `json:"name"`
 		Type       string            `json:"type"`
 		Autoload   map[string]any    `json:"autoload"`
 		Authors    []Author          `json:"authors"`
 		RequireDev map[string]string `json:"require-dev"`
+	}
+
+	projectNameSlug, err := generateProjectNameSlug(projectName)
+	if err != nil {
+		return nil, err
 	}
 
 	parts := strings.Split(projectName, "/")
@@ -36,7 +42,7 @@ func generateComposerJson(projectName string, authors []Author) (string, error) 
 	namespace := strings.Join(processedParts, "\\") + "\\"
 
 	composer := ComposerJson{
-		Name: projectName,
+		Name: *projectNameSlug,
 		Type: "project",
 		Autoload: map[string]any{
 			"psr-4": map[string]string{
@@ -53,10 +59,12 @@ func generateComposerJson(projectName string, authors []Author) (string, error) 
 
 	jsonData, err := json.MarshalIndent(composer, "", "    ")
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return string(jsonData), nil
+	jsonDataString := string(jsonData)
+
+	return &jsonDataString, nil
 }
 
 func writeComposerJson(exportDir string, projectName string, authors []Author) error {
@@ -65,7 +73,7 @@ func writeComposerJson(exportDir string, projectName string, authors []Author) e
 		return err
 	}
 
-	composerBytes := []byte(composerJson)
+	composerBytes := []byte(*composerJson)
 
 	composerPath := filepath.Join(exportDir, "/composer.json")
 	err = os.WriteFile(composerPath, composerBytes, 0644)
@@ -74,4 +82,22 @@ func writeComposerJson(exportDir string, projectName string, authors []Author) e
 	}
 
 	return nil
+}
+
+func generateProjectNameSlug(projectName string) (*string, error) {
+	parts := strings.Split(projectName, "/")
+	if len(parts) < 2 {
+		return nil, fmt.Errorf("Expecting projectname format {company}/{pluginname}, got %s", projectName)
+	}
+
+	for i := range parts {
+		part := parts[i]
+		words := splitOnCapitals(part)
+		toLowerWords(&words)
+		parts[i] = strings.Join(words, "-")
+	}
+
+	result := strings.Join(parts, "/")
+
+	return &result, nil
 }

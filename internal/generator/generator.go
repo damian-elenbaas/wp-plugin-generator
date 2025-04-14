@@ -2,7 +2,9 @@ package generator
 
 import (
 	"errors"
+	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 )
@@ -28,6 +30,12 @@ func GeneratePlugin(exportDir string, projectName string) error {
 	}
 
 	err = pluginData.createFiles(exportDir)
+	if err != nil {
+		return err
+	}
+
+	// Trigger 'composer install' to download all packages and create the autoload setup.
+	err = runComposerInstall(exportDir)
 	if err != nil {
 		return err
 	}
@@ -66,6 +74,19 @@ func createDirectories(exportDir string) error {
 		if err != nil {
 			return err
 		}
+	}
+
+	return nil
+}
+
+func runComposerInstall(exportDir string) error {
+	// Run composer install
+	cmd := exec.Command("composer", "install")
+	cmd.Dir = exportDir
+	err := cmd.Run()
+	if err != nil {
+		fmt.Printf("Error running composer install: %v\n", err)
+		return err
 	}
 
 	return nil

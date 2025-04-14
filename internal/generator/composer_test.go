@@ -7,57 +7,43 @@ import (
 
 func TestGenerateComposerJson(t *testing.T) {
 	tests := []struct {
-		name              string
-		projectName       string
-		authors           []Author
-		expectedNamespace string
-		wantErr           bool
+		name                string
+		projectName         string
+		authors             []Author
+		expectedProjectName string
+		expectedNamespace   string
+		wantErr             bool
 	}{
 		{
-			name:        "basic-1",
-			projectName: "MyWordpressPlugin",
-			authors: []Author{
-				{Name: "John Doe", Email: "john@example.com"},
-			},
-			expectedNamespace: "MyWordpressPlugin\\",
-			wantErr:           false,
-		},
-		{
-			name:        "basic-2",
-			projectName: "my-wordpress-plugin",
-			authors: []Author{
-				{Name: "John Doe", Email: "john@example.com"},
-			},
-			expectedNamespace: "MyWordpressPlugin\\",
-			wantErr:           false,
-		},
-		{
-			name:        "advanced project name",
+			name:        "basic",
 			projectName: "company/my-project",
 			authors: []Author{
 				{Name: "John Doe", Email: "john@example.com"},
 			},
-			expectedNamespace: "Company\\MyProject\\",
-			wantErr:           false,
+			expectedProjectName: "company/my-project",
+			expectedNamespace:   "Company\\MyProject\\",
+			wantErr:             false,
 		},
 		{
-			name:        "advanced project name 2",
+			name:        "basic-2",
 			projectName: "Company/MyProject",
 			authors: []Author{
 				{Name: "John Doe", Email: "john@example.com"},
 			},
-			expectedNamespace: "Company\\MyProject\\",
-			wantErr:           false,
+			expectedProjectName: "company/my-project",
+			expectedNamespace:   "Company\\MyProject\\",
+			wantErr:             false,
 		},
 		{
 			name:        "multiple authors",
-			projectName: "project",
+			projectName: "company/project",
 			authors: []Author{
 				{Name: "John Doe", Email: "john@example.com"},
 				{Name: "Adam Doe", Email: "adam@example.com"},
 			},
-			expectedNamespace: "Project\\",
-			wantErr:           false,
+			expectedProjectName: "company/project",
+			expectedNamespace:   "Company\\Project\\",
+			wantErr:             false,
 		},
 	}
 
@@ -71,15 +57,15 @@ func TestGenerateComposerJson(t *testing.T) {
 			}
 
 			var result map[string]any
-			if err := json.Unmarshal([]byte(got), &result); err != nil {
+			if err := json.Unmarshal([]byte(*got), &result); err != nil {
 				t.Errorf("generateComposerJson() produced invalid JSON: %v", err)
 				return
 			}
 
 			// Check project name
 			name, ok := result["name"].(string)
-			if !ok || name != tt.projectName {
-				t.Errorf("generateComposerJson() name mismatch: expected %s, got %s", tt.projectName, name)
+			if !ok || name != tt.expectedProjectName {
+				t.Errorf("generateComposerJson() name mismatch: expected %s, got %s", tt.expectedProjectName, name)
 				return
 			}
 
