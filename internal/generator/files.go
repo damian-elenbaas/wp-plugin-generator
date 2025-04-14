@@ -14,6 +14,7 @@ func (data *pluginData) createFiles(exportDir string) error {
 	data.createLoaderFile(exportDir)
 	data.createMainFile(exportDir)
 	data.createPluginRootFile(exportDir)
+	data.createPublicFiles(exportDir)
 
 	return nil
 }
@@ -79,6 +80,21 @@ func (data *pluginData) createAdminFiles(exportDir string) {
 	processTemplate(
 		"admin/js/plugin-name-admin.js.tmpl",
 		filepath.Join(exportDir, "admin/js/"+data.Slug+"-admin.js"),
+		*data)
+}
+
+func (data *pluginData) createPublicFiles(exportDir string) {
+	processTemplate(
+		"public/PluginName_Public.php.tmpl",
+		filepath.Join(exportDir, "public/"+data.ClassPrefix+"_Public.php"),
+		*data)
+	processTemplate(
+		"public/css/plugin-name-public.css.tmpl",
+		filepath.Join(exportDir, "public/css/"+data.Slug+"-public.css"),
+		*data)
+	processTemplate(
+		"public/js/plugin-name-public.js.tmpl",
+		filepath.Join(exportDir, "public/js/"+data.Slug+"-public.js"),
 		*data)
 }
 

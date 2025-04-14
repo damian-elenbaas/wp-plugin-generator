@@ -29,8 +29,6 @@ class {{.ClassPrefix}} {
      * Set the plugin name and the plugin version that can be used throughout the plugin.
      * Load the dependencies, define the locale, and set the hooks for the admin area and
      * the public-facing side of the site.
-     *
-     * @since    1.0.0
      */
     public function __construct() {
         if (defined('{{.ConstantPrefix}}_VERSION')) {
@@ -69,9 +67,6 @@ class {{.ClassPrefix}} {
      *
      * Uses the {{.ClassPrefix}}_i18n class in order to set the domain and to register the hook
      * with WordPress.
-     *
-     * @since    1.0.0
-     * @access   private
      */
     private function set_locale(): void {
 
@@ -83,9 +78,6 @@ class {{.ClassPrefix}} {
     /**
      * Register all of the hooks related to the admin area functionality
      * of the plugin.
-     *
-     * @since    1.0.0
-     * @access   private
      */
     private function define_admin_hooks(): void {
 
@@ -99,9 +91,6 @@ class {{.ClassPrefix}} {
     /**
      * Register all of the hooks related to the public-facing functionality
      * of the plugin.
-     *
-     * @since    1.0.0
-     * @access   private
      */
     private function define_public_hooks(): void {
 
@@ -114,8 +103,6 @@ class {{.ClassPrefix}} {
 
     /**
      * Run the loader to execute all of the hooks with WordPress.
-     *
-     * @since    1.0.0
      */
     public function run(): void {
         $this->loader->run();
@@ -124,9 +111,6 @@ class {{.ClassPrefix}} {
     /**
      * The name of the plugin used to uniquely identify it within the context of
      * WordPress and to define internationalization functionality.
-     *
-     * @since     1.0.0
-     * @return    string    The name of the plugin.
      */
     public function get_plugin_name(): string {
         return $this->plugin_name;
@@ -134,9 +118,6 @@ class {{.ClassPrefix}} {
 
     /**
      * The reference to the class that orchestrates the hooks with the plugin.
-     *
-     * @since     1.0.0
-     * @return    WP_Invoicer_Loader    Orchestrates the hooks of the plugin.
      */
     public function get_loader(): {{.ClassPrefix}}_Loader {
         return $this->loader;
@@ -144,9 +125,6 @@ class {{.ClassPrefix}} {
 
     /**
      * Retrieve the version number of the plugin.
-     *
-     * @since     1.0.0
-     * @return    string    The version number of the plugin.
      */
     public function get_version(): string {
         return $this->version;
