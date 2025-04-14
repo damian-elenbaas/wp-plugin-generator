@@ -3,6 +3,7 @@ package generator
 import (
 	"errors"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -16,13 +17,17 @@ func GeneratePlugin(exportDir string, projectName string) error {
 		return err
 	}
 
-	// Create directories if they don't exist
-	err = os.MkdirAll(exportDir, 0755)
+	err = createDirectories(exportDir)
 	if err != nil {
 		return err
 	}
 
 	err = writeComposerJson(exportDir, projectName, []Author{})
+	if err != nil {
+		return err
+	}
+
+	err = createPluginRootFile(exportDir, *pluginData)
 	if err != nil {
 		return err
 	}
@@ -44,4 +49,38 @@ func containsInvalidCharacters(s string) bool {
 		}
 	}
 	return false
+}
+
+func createDirectories(exportDir string) error {
+	// Create root directories if they don't exist
+	err := os.MkdirAll(exportDir, 0755)
+	if err != nil {
+		return err
+	}
+
+	// Create includes directory
+	err = os.MkdirAll(filepath.Join(exportDir, "includes"), 0755)
+	if err != nil {
+		return err
+	}
+
+	// Create public directory
+	err = os.MkdirAll(filepath.Join(exportDir, "public"), 0755)
+	if err != nil {
+		return err
+	}
+
+	// Create admin directory
+	err = os.MkdirAll(filepath.Join(exportDir, "admin"), 0755)
+	if err != nil {
+		return err
+	}
+
+	// Create languages directory
+	err = os.MkdirAll(filepath.Join(exportDir, "languages"), 0755)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
