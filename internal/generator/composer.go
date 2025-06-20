@@ -49,11 +49,12 @@ func generateComposerJson(projectName string, authors []Author) (*string, error)
 				namespace:              "includes/",
 				namespace + "Public\\": "public/",
 				namespace + "Admin\\":  "admin/",
+				namespace + "API\\":    "api/",
 			},
 		},
 		Authors: authors,
 		RequireDev: map[string]string{
-			"php-stubs/wordpress-stubs": "^6.7",
+			"php-stubs/wordpress-stubs": "^6.8",
 		},
 	}
 

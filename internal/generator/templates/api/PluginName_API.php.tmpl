@@ -1,0 +1,31 @@
+<?php
+
+namespace {{.NamespaceName}}\API;
+
+use WP_REST_Controller;
+
+class {{.ClassPrefix}}_API {
+
+    private string $plugin_name;
+    private string $version;
+
+    /**
+     * The array of REST API controllers.
+     *
+     * @var array<WP_REST_Controller>
+     */
+    private array $controllers;
+
+    public function __construct($plugin_name, $version) {
+        $this->plugin_name = $plugin_name;
+        $this->version = $version;
+
+        $this->controllers = array();
+    }
+
+    public function register_routes(): void {
+        foreach ($this->controllers as $controller) {
+            $controller->register_routes();
+        }
+    }
+}

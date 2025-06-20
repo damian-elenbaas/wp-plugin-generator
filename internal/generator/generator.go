@@ -63,6 +63,7 @@ var directories = []string{
 	"admin",
 	"admin/css",
 	"admin/js",
+	"api",
 	"languages",
 	"vendor",
 }

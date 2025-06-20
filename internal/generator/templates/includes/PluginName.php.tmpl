@@ -3,6 +3,7 @@
 namespace {{.NamespaceName}};
 
 use {{.NamespaceName}}\Admin\{{.ClassPrefix}}_Admin;
+use {{.NamespaceName}}}\API\{{.ClassPrefix}}_API;
 use {{.NamespaceName}}\Public\{{.ClassPrefix}}_Public;
 
 class {{.ClassPrefix}} {
@@ -42,6 +43,7 @@ class {{.ClassPrefix}} {
         $this->set_locale();
         $this->define_admin_hooks();
         $this->define_public_hooks();
+        $this->define_api_hooks();
     }
 
     /**
@@ -99,6 +101,13 @@ class {{.ClassPrefix}} {
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
         $this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 
+    }
+
+    private function define_api_hooks(): void {
+
+        $plugin_api = new WP_Invoicer_API($this->get_plugin_name(), $this->get_version());
+
+        $this->loader->add_action('rest_api_init', $plugin_api, 'register_routes');
     }
 
     /**

@@ -15,6 +15,7 @@ func (data *pluginData) createFiles(exportDir string) error {
 	data.createMainFile(exportDir)
 	data.createPluginRootFile(exportDir)
 	data.createPublicFiles(exportDir)
+	data.createApiFiles(exportDir)
 
 	return nil
 }
@@ -95,6 +96,13 @@ func (data *pluginData) createPublicFiles(exportDir string) {
 	processTemplate(
 		"public/js/plugin-name-public.js.tmpl",
 		filepath.Join(exportDir, "public/js/"+data.Slug+"-public.js"),
+		*data)
+}
+
+func (data *pluginData) createApiFiles(exportDir string) {
+	processTemplate(
+		"api/PluginName_API.php.tmpl",
+		filepath.Join(exportDir, "api/"+data.ClassPrefix+"_API.php"),
 		*data)
 }
 
