@@ -52,7 +52,7 @@ class {{.ClassPrefix}} {
      * Include the following files that make up the plugin:
      *
      * - {{.ClassPrefix}}_Loader. Orchestrates the hooks of the plugin.
-     * - {{.ClassPrefix}}_i18n. Defines internationalization functionality.
+     * - {{.ClassPrefix}}_I18n. Defines internationalization functionality.
      * - {{.ClassPrefix}}_Admin. Defines all hooks for the admin area.
      * - {{.ClassPrefix}}_Public. Defines all hooks for the public side of the site.
      *
@@ -72,7 +72,7 @@ class {{.ClassPrefix}} {
      */
     private function set_locale(): void {
 
-        $plugin_i18n = new {{.ClassPrefix}}_i18n();
+        $plugin_i18n = new {{.ClassPrefix}}_I18n();
 
         $this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
     }
