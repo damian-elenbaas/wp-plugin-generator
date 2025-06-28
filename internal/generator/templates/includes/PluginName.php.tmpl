@@ -3,7 +3,7 @@
 namespace {{.NamespaceName}};
 
 use {{.NamespaceName}}\Admin\{{.ClassPrefix}}_Admin;
-use {{.NamespaceName}}}\API\{{.ClassPrefix}}_API;
+use {{.NamespaceName}}\API\{{.ClassPrefix}}_API;
 use {{.NamespaceName}}\Public\{{.ClassPrefix}}_Public;
 
 class {{.ClassPrefix}} {
@@ -105,7 +105,7 @@ class {{.ClassPrefix}} {
 
     private function define_api_hooks(): void {
 
-        $plugin_api = new WP_Invoicer_API($this->get_plugin_name(), $this->get_version());
+        $plugin_api = new {{.ClassPrefix}}_API($this->get_plugin_name(), $this->get_version());
 
         $this->loader->add_action('rest_api_init', $plugin_api, 'register_routes');
     }
